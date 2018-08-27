@@ -1,6 +1,10 @@
 package com.yumumu.front.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.yumumu.front.model.ChangeSlide;
+import com.yumumu.front.model.ChangeWidget;
+import com.yumumu.front.utils.CommandServiceUtils;
+import com.yumumu.front.utils.CommandServiceUtils2;
 import enums.ApiResponseEnum;
 import model.Slide;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +22,12 @@ public class MyController {
     @Autowired
     private RedisTemplate redisTemplate;
 
+    @Autowired
+    private CommandServiceUtils2 commandServiceUtils2;
+
+    @Autowired
+    private CommandServiceUtils commandServiceUtils;
+
     @Reference(version = "1.0.0",
             application = "${dubbo.application.id}", check = false)
     private SlideService slideService;
@@ -34,6 +44,20 @@ public class MyController {
         }
     }
 
+    @RequestMapping(value = "/test")
+    public String test(){
+
+        ChangeSlide changeSlide = new ChangeSlide("Hello World");
+        ChangeWidget changeWidget = new ChangeWidget(1021);
+
+        System.out.println(commandServiceUtils.executeCommand(changeSlide));
+        System.out.println(commandServiceUtils.executeCommand(changeWidget));
+
+        System.out.println(commandServiceUtils2.executeCommand(changeSlide));
+        System.out.println(commandServiceUtils2.executeCommand(changeWidget));
+
+        return "123";
+    }
 
 
 }
